@@ -10,17 +10,12 @@ import moment from "moment";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "moment/locale/es";
-
-const events = [{
-    title: "Cumpleaños del jefe",
-    start: moment().toDate(),
-    end: moment().add(2, "hours").toDate(),
-    bgcolor: "#fafafa",
-    user: {
-        _id: "123",
-        name: "Arnau"
-    }
-}];
+import { useDispatch, useSelector } from "react-redux";
+import { uiReducer } from "../../reducers/uiReducer";
+import { uiOpenModal } from "../../actions/ui";
+import { eventSetActive } from "../../actions/events";
+import { calendarReducer } from "../../reducers/calendarReducer";
+import AddNewFab from "../ui/AddNewFab";
 
 moment.locale("es");
 
@@ -28,8 +23,12 @@ const localizer = momentLocalizer(moment);
 
 const CalendarScreen = () => {
 
-    const [lastView, setLastView] = useState(localStorage.getItem("lastView") || "month");
+    const { events } = useSelector(state => state.calendar);
 
+    const uiDispatch = useDispatch(uiReducer);
+    const calendarDispatch = useDispatch(calendarReducer);
+
+    const [lastView, setLastView] = useState(localStorage.getItem("lastView") || "month");
 
     const eventStyleGetter = (event, start, end, isSelected) => {
         // console.log(event, start, end, isSelected);
@@ -46,14 +45,12 @@ const CalendarScreen = () => {
         };
     };
 
-    const onDoubleClick = (e) => {
-        console.log("Double");
-        console.log(e);
+    const onDoubleClick = () => {
+        uiDispatch(uiOpenModal());
     };
 
     const onSelectEvent = (e) => {
-        console.log("Select");
-        console.log(e);
+        calendarDispatch(eventSetActive(e));
     };
 
     const onViewChange = (e) => {
@@ -79,6 +76,8 @@ const CalendarScreen = () => {
                     event: CalendarEvent
                 }}
             />
+
+            <AddNewFab />
 
             <CalendarModal />
         </div>

@@ -35,7 +35,7 @@ module.exports = {
 			"error",
 			"always"
 		],
-		"allowTemplateLiterals": true,
+		"allowTemplateLiterals": "off",
 		"react/prop-types": ["off"],
 		"no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
 	}

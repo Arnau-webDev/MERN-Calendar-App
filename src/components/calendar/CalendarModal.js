@@ -5,6 +5,12 @@ import DateTimePicker from "react-datetime-picker";
 import Swal from "sweetalert2";
 
 import moment from "moment";
+import { uiReducer } from "../../reducers/uiReducer";
+import { uiCloseModal } from "../../actions/ui";
+import { useDispatch, useSelector } from "react-redux";
+import { eventAddNew, eventClearActiveEvent } from "../../actions/events";
+import { calendarReducer } from "../../reducers/calendarReducer";
+import { useEffect } from "react";
 
 const customStyles = {
     content: {
@@ -21,20 +27,34 @@ Modal.setAppElement("#root");
 const startDate = moment().minutes(0).seconds(0).add(1, "hour");
 const endDate = moment().minutes(0).seconds(0).add(3, "hour");
 
+const initEvent = {
+    title: "",
+    notes: "",
+    start: startDate.toDate(),
+    end: endDate.toDate()
+};
+
 const CalendarModal = () => {
+
+    const { modalOpen } = useSelector(state => state.ui);
+    const { activeEvent } = useSelector(state => state.calendar);
+
+    const uiDispatch = useDispatch(uiReducer);
+    const calendarDispatch = useDispatch(calendarReducer);
 
     const [dateStart, setDateStart] = useState(startDate.toDate());
     const [dateEnd, setDateEnd] = useState(endDate.toDate());
     const [titleValid, setTitleValid] = useState(true);
 
-    const [formValues, setFormValues] = useState({
-        title: "Evento",
-        notes: [],
-        start: startDate.toDate(),
-        end: endDate.toDate()
-    });
+    const [formValues, setFormValues] = useState(initEvent);
 
     const { notes, title, start, end } = formValues;
+
+    useEffect(() => {
+        if (activeEvent) {
+            setFormValues(activeEvent);
+        }
+    }, [activeEvent, setFormValues]);
 
     const handleStartDateChange = (e) => {
         setFormValues({
@@ -80,27 +100,31 @@ const CalendarModal = () => {
         }
 
         // TODO: Realizar grabacion BD
+        console.log(formValues);
+        calendarDispatch(eventAddNew({
+            ...formValues,
+            id: new Date(),
+            user: {
+                _id: "123",
+                name: "Arnau"
+            }
+        }));
 
         setTitleValid(true);
-        closeModal();
+        handleModalClose();
     };
 
-    // Lo haremos con Redux
-    const [modalIsOpen, setIsOpen] = useState(false);
-
-    function openModal() {
-        setIsOpen(true);
-    }
-
-    const closeModal = () => {
-        setIsOpen(false);
+    const handleModalClose = () => {
+        setFormValues(initEvent);
+        calendarDispatch(eventClearActiveEvent());
+        uiDispatch(uiCloseModal());
     };
 
     return (
         <>
             <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
+                isOpen={modalOpen}
+                onRequestClose={handleModalClose}
                 closeTimeoutMS={200}
                 style={customStyles}
                 contentLabel="Example Modal"
@@ -169,8 +193,6 @@ const CalendarModal = () => {
                 </form>
 
             </Modal>
-
-            <h1 onClick={openModal}>Click me</h1>
         </>
     );
 };
