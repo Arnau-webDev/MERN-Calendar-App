@@ -1,13 +1,21 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { eventClearActiveEvent } from "../../actions/events";
 import { uiOpenModal } from "../../actions/ui";
+import { calendarReducer } from "../../reducers/calendarReducer";
 import { uiReducer } from "../../reducers/uiReducer";
 
 const AddNewFab = () => {
 
     const uiDispatch = useDispatch(uiReducer);
+    const calendarDispatch = useDispatch(calendarReducer);
+    const { activeEvent } = useSelector(state => state.calendar);
 
     const handleModalOpen = () => {
+        if (activeEvent) {
+            calendarDispatch(eventClearActiveEvent());
+        }
+
         uiDispatch(uiOpenModal());
     };
 

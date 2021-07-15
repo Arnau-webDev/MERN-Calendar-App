@@ -72,5 +72,11 @@ html, body {
     right: 25px;
     font-size: 30px;
     padding: 25px;
+}
 
+.fab-danger {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    padding: 10px;
 }

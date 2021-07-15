@@ -8,7 +8,7 @@ import moment from "moment";
 import { uiReducer } from "../../reducers/uiReducer";
 import { uiCloseModal } from "../../actions/ui";
 import { useDispatch, useSelector } from "react-redux";
-import { eventAddNew, eventClearActiveEvent } from "../../actions/events";
+import { eventAddNew, eventClearActiveEvent, eventUpdated } from "../../actions/events";
 import { calendarReducer } from "../../reducers/calendarReducer";
 import { useEffect } from "react";
 
@@ -53,6 +53,8 @@ const CalendarModal = () => {
     useEffect(() => {
         if (activeEvent) {
             setFormValues(activeEvent);
+        } else {
+            setFormValues(initEvent);
         }
     }, [activeEvent, setFormValues]);
 
@@ -100,15 +102,18 @@ const CalendarModal = () => {
         }
 
         // TODO: Realizar grabacion BD
-        console.log(formValues);
-        calendarDispatch(eventAddNew({
-            ...formValues,
-            id: new Date(),
-            user: {
-                _id: "123",
-                name: "Arnau"
-            }
-        }));
+        if (activeEvent) {
+            calendarDispatch(eventUpdated(formValues));
+        } else {
+            calendarDispatch(eventAddNew({
+                ...formValues,
+                id: new Date(),
+                user: {
+                    _id: "123",
+                    name: "Arnau"
+                }
+            }));
+        }
 
         setTitleValid(true);
         handleModalClose();
@@ -118,6 +123,11 @@ const CalendarModal = () => {
         setFormValues(initEvent);
         calendarDispatch(eventClearActiveEvent());
         uiDispatch(uiCloseModal());
+
+        const allEvents = document.querySelectorAll(".rbc-event");
+        allEvents.forEach((event) => {
+            event.classList.remove("rbc-selected");
+        });
     };
 
     return (
@@ -131,7 +141,8 @@ const CalendarModal = () => {
                 className="modal"
                 overlayClassName="modal-fondo"
             >
-                <h1> Nuevo evento </h1>
+                {activeEvent ? <h1> Editar evento </h1> : <h1> Nuevo evento </h1>}
+
                 <hr />
                 <form className="container" onSubmit={hanldeSubmitForm}>
 

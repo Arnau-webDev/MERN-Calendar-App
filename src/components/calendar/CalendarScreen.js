@@ -13,9 +13,10 @@ import "moment/locale/es";
 import { useDispatch, useSelector } from "react-redux";
 import { uiReducer } from "../../reducers/uiReducer";
 import { uiOpenModal } from "../../actions/ui";
-import { eventSetActive } from "../../actions/events";
+import { eventClearActiveEvent, eventSetActive } from "../../actions/events";
 import { calendarReducer } from "../../reducers/calendarReducer";
 import AddNewFab from "../ui/AddNewFab";
+import DeleteEventFab from "../ui/DeleteEventFab";
 
 moment.locale("es");
 
@@ -23,7 +24,7 @@ const localizer = momentLocalizer(moment);
 
 const CalendarScreen = () => {
 
-    const { events } = useSelector(state => state.calendar);
+    const { events, activeEvent } = useSelector(state => state.calendar);
 
     const uiDispatch = useDispatch(uiReducer);
     const calendarDispatch = useDispatch(calendarReducer);
@@ -31,8 +32,6 @@ const CalendarScreen = () => {
     const [lastView, setLastView] = useState(localStorage.getItem("lastView") || "month");
 
     const eventStyleGetter = (event, start, end, isSelected) => {
-        // console.log(event, start, end, isSelected);
-
         const style = {
             backgroundColor: "#367CCF7",
             borderRadius: "0px",
@@ -58,6 +57,15 @@ const CalendarScreen = () => {
         localStorage.setItem("lastView", e);
     };
 
+    const onSelectSlot = () => {
+        calendarDispatch(eventClearActiveEvent());
+
+        const allEvents = document.querySelectorAll(".rbc-event");
+        allEvents.forEach((event) => {
+            event.classList.remove("rbc-selected");
+        });
+    };
+
     return (
         <div className="calendar-screen">
             <Navbar />
@@ -70,6 +78,8 @@ const CalendarScreen = () => {
                 onDoubleClickEvent={onDoubleClick}
                 onSelectEvent={onSelectEvent}
                 onView={onViewChange}
+                onSelectSlot={onSelectSlot}
+                selectable={true}
                 view={lastView}
                 eventPropGetter={eventStyleGetter}
                 components={{
@@ -78,6 +88,8 @@ const CalendarScreen = () => {
             />
 
             <AddNewFab />
+
+            {activeEvent && <DeleteEventFab />}
 
             <CalendarModal />
         </div>
