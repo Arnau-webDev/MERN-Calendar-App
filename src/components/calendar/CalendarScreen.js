@@ -31,7 +31,7 @@ const CalendarScreen = () => {
 
     const [lastView, setLastView] = useState(localStorage.getItem("lastView") || "month");
 
-    const eventStyleGetter = (event, start, end, isSelected) => {
+    const eventStyleGetter = () => {
         const style = {
             backgroundColor: "#367CCF7",
             borderRadius: "0px",
