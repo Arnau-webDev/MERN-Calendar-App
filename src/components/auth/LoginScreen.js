@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
 import { startLogin, startRegister } from "../../actions/auth";
 import { useForm } from "../../hooks/useForm";
 import "../auth/login.css";
 
 const LoginScreen = () => {
-
-    const [missingFieldsToInform, setMissingFieldsToInform] = useState(true);
 
     const dispatch = useDispatch();
 
@@ -18,7 +16,7 @@ const LoginScreen = () => {
 
     const { lEmail, lPassword } = formLoginValues;
 
-    const [formRegisterValues, handleRegisterInputChange, reset] = useForm({
+    const [formRegisterValues, handleRegisterInputChange] = useForm({
         rName: "",
         rEmail: "",
         rPassword: "",
@@ -27,31 +25,6 @@ const LoginScreen = () => {
 
     const { rName, rEmail, rPassword, rPassword2 } = formRegisterValues;
 
-    const toggleClassSubmitBtn = () => {
-        const btnSubmit = document.querySelector(".register");
-
-        if (missingFieldsToInform) {
-            btnSubmit.classList.add("disabled");
-        } else {
-            btnSubmit.classList.remove("disabled");
-        }
-    };
-
-    useEffect(() => {
-        console.log("---------------------------------------------------");
-        console.log(rName.length);
-        console.log(rEmail.length);
-        console.log(rPassword.length);
-        console.log(rPassword2.length);
-        if (rName.length > 2 && rEmail.length > 2 && rPassword.length > 2 && rPassword2.length > 2) {
-            setMissingFieldsToInform(false);
-        } else {
-            setMissingFieldsToInform(true);
-        }
-
-        toggleClassSubmitBtn();
-    }, [rName, rEmail, rPassword, rPassword2]);
-
     const handleLogin = (e) => {
         e.preventDefault();
         dispatch(startLogin(lEmail, lPassword));
@@ -59,8 +32,12 @@ const LoginScreen = () => {
 
     const handleRegister = (e) => {
         e.preventDefault();
+
+        if (rPassword !== rPassword2) {
+            return Swal.fire("Error", "Passwords don't match", "error");
+        }
+
         dispatch(startRegister(rName, rEmail, rPassword));
-        reset();
     };
 
     return (
@@ -149,8 +126,6 @@ const LoginScreen = () => {
                                 type="submit"
                                 className="btnSubmit register"
                                 value="Crear cuenta"
-                                disabled={missingFieldsToInform}
-
                             />
                         </div>
                     </form>

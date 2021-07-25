@@ -37,6 +37,7 @@ module.exports = {
 		],
 		"allowTemplateLiterals": "off",
 		"react/prop-types": ["off"],
-		"no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
+		"no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
+		"no-extra-boolean-cast": 0
 	}
 };
