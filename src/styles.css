@@ -80,3 +80,11 @@ html, body {
     left: 25px;
     padding: 10px;
 }
+
+.rbc-toolbar {
+    margin: 0 15px 15px 15px;
+}
+
+.rbc-btn-group {
+    margin-right: 15px;
+}

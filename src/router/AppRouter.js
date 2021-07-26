@@ -28,12 +28,17 @@ const AppRouter = () => {
         <Router>
             <Switch>
 
-                {!uid
-                    ? <Route exact path="/login" component={LoginScreen}></Route>
-                    : <Route path="/" component={CalendarScreen}></Route>
+                {!!uid
+                    ? (
+                        <Router>
+                            <Route exact path="/" component={CalendarScreen}></Route>
+                            <Redirect to="/" />
+                        </Router>
+                    )
+                    : <Route exact path="/login" component={LoginScreen}></Route>
                 }
 
-                <Redirect to="/" />
+                <Redirect to="/login" />
             </Switch>
         </Router>
     );

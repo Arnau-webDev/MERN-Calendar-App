@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 
 import Navbar from "../ui/Navbar";
@@ -13,7 +13,7 @@ import "moment/locale/es";
 import { useDispatch, useSelector } from "react-redux";
 import { uiReducer } from "../../reducers/uiReducer";
 import { uiOpenModal } from "../../actions/ui";
-import { eventClearActiveEvent, eventSetActive } from "../../actions/events";
+import { eventClearActiveEvent, eventSetActive, eventStartLoading } from "../../actions/events";
 import { calendarReducer } from "../../reducers/calendarReducer";
 import AddNewFab from "../ui/AddNewFab";
 import DeleteEventFab from "../ui/DeleteEventFab";
@@ -25,15 +25,20 @@ const localizer = momentLocalizer(moment);
 const CalendarScreen = () => {
 
     const { events, activeEvent } = useSelector(state => state.calendar);
+    const { uid } = useSelector(state => state.auth);
 
     const uiDispatch = useDispatch(uiReducer);
     const calendarDispatch = useDispatch(calendarReducer);
 
     const [lastView, setLastView] = useState(localStorage.getItem("lastView") || "month");
 
-    const eventStyleGetter = () => {
+    useEffect(() => {
+        calendarDispatch(eventStartLoading());
+    }, [calendarDispatch]);
+
+    const eventStyleGetter = (event) => {
         const style = {
-            backgroundColor: "#367CCF7",
+            backgroundColor: (uid === event.user._id) ? "#367CCF7" : "#465660",
             borderRadius: "0px",
             opacity: 0.8,
             display: "block",
@@ -72,9 +77,9 @@ const CalendarScreen = () => {
             <Calendar
                 localizer={localizer}
                 events={events}
+                views={["month", "week", "day"]}
                 startAccessor="start"
                 endAccessor="end"
-                messages={messages}
                 onDoubleClickEvent={onDoubleClick}
                 onSelectEvent={onSelectEvent}
                 onView={onViewChange}

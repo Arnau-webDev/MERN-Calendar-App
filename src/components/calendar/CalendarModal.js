@@ -8,7 +8,7 @@ import moment from "moment";
 import { uiReducer } from "../../reducers/uiReducer";
 import { uiCloseModal } from "../../actions/ui";
 import { useDispatch, useSelector } from "react-redux";
-import { eventAddNew, eventClearActiveEvent, eventUpdated } from "../../actions/events";
+import { eventClearActiveEvent, eventStartAddNew, eventStartUpdate } from "../../actions/events";
 import { calendarReducer } from "../../reducers/calendarReducer";
 import { useEffect } from "react";
 
@@ -42,8 +42,8 @@ const CalendarModal = () => {
     const uiDispatch = useDispatch(uiReducer);
     const calendarDispatch = useDispatch(calendarReducer);
 
-    const [dateStart, setDateStart] = useState(startDate.toDate());
-    const [dateEnd, setDateEnd] = useState(endDate.toDate());
+    // const [dateStart, setDateStart] = useState(startDate.toDate());
+    // const [dateEnd, setDateEnd] = useState(endDate.toDate());
     const [titleValid, setTitleValid] = useState(true);
 
     const [formValues, setFormValues] = useState(initEvent);
@@ -52,6 +52,8 @@ const CalendarModal = () => {
 
     useEffect(() => {
         if (activeEvent) {
+            console.log("start");
+            console.log(activeEvent.start);
             setFormValues(activeEvent);
         } else {
             setFormValues(initEvent);
@@ -64,7 +66,7 @@ const CalendarModal = () => {
             start: e
         });
 
-        setDateStart(e);
+        // setDateStart(e);
     };
 
     const handleEndDateChange = (e) => {
@@ -73,7 +75,7 @@ const CalendarModal = () => {
             end: e
         });
 
-        setDateEnd(e);
+        // setDateEnd(e);
     };
 
     const hadleInputChange = (e) => {
@@ -103,16 +105,9 @@ const CalendarModal = () => {
 
         // TODO: Realizar grabacion BD
         if (activeEvent) {
-            calendarDispatch(eventUpdated(formValues));
+            calendarDispatch(eventStartUpdate(formValues));
         } else {
-            calendarDispatch(eventAddNew({
-                ...formValues,
-                id: new Date(),
-                user: {
-                    _id: "123",
-                    name: "Arnau"
-                }
-            }));
+            calendarDispatch(eventStartAddNew(formValues));
         }
 
         setTitleValid(true);
@@ -141,7 +136,7 @@ const CalendarModal = () => {
                 className="modal"
                 overlayClassName="modal-fondo"
             >
-                {activeEvent ? <h1> Editar evento </h1> : <h1> Nuevo evento </h1>}
+                {activeEvent ? <h1> Edit event </h1> : <h1> New event </h1>}
 
                 <hr />
                 <form className="container" onSubmit={hanldeSubmitForm}>
@@ -150,7 +145,7 @@ const CalendarModal = () => {
                         <label>Fecha y hora inicio</label>
                         <DateTimePicker
                             onChange={handleStartDateChange}
-                            value={dateStart}
+                            value={start}
                             className="form-control"
                         />
                     </div>
@@ -159,9 +154,9 @@ const CalendarModal = () => {
                         <label>Fecha y hora fin</label>
                         <DateTimePicker
                             onChange={handleEndDateChange}
-                            value={dateEnd}
+                            value={end}
                             className="form-control"
-                            minDate={dateStart}
+                            minDate={start}
                         />
                     </div>
 
