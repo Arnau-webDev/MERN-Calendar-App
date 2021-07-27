@@ -10,7 +10,7 @@ const LoginScreen = () => {
     const dispatch = useDispatch();
 
     const [formLoginValues, handleLoginInputChange] = useForm({
-        lEmail: "newUser223@gmail.com",
+        lEmail: "testUser@gmail.com",
         lPassword: "123456"
     });
 

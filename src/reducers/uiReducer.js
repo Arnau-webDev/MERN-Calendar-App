@@ -2,6 +2,7 @@ import { types } from "../types/types";
 
 const initialState = {
     modalOpen: false,
+    deleteClass: "animate__fadeIn"
 };
 
 export const uiReducer = (state = initialState, action) => {
@@ -15,6 +16,11 @@ export const uiReducer = (state = initialState, action) => {
             return {
                 ...state,
                 modalOpen: false
+            };
+        case types.uiChangeDeleteClass:
+            return {
+                ...state,
+                deleteClass: "animate__fadeOut",
             };
         default:
             return state;

@@ -88,3 +88,39 @@ html, body {
 .rbc-btn-group {
     margin-right: 15px;
 }
+
+.modalH1 {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    margin-left: 10px;
+    color: hsl(213,61%,51%);
+}
+
+.rbc-btn-group > *:focus {
+    outline: none;
+}
+
+.navbar {
+    margin-bottom: 15px !important;
+}
+
+.navbar > * {
+    margin: 5px 0;
+}
+
+.calendarEventTitle {
+    font-size: 0.9rem;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+
+.rbc-label {
+    min-width: 57.9688px !important;
+}
+
+.rbc-timeslot-group {
+    padding: 5px;
+}
+
+.rbc-selected {
+    background-color: hsl(213,91%,61%) !important;
+}

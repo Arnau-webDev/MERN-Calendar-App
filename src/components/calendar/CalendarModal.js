@@ -52,8 +52,6 @@ const CalendarModal = () => {
 
     useEffect(() => {
         if (activeEvent) {
-            console.log("start");
-            console.log(activeEvent.start);
             setFormValues(activeEvent);
         } else {
             setFormValues(initEvent);
@@ -116,8 +114,11 @@ const CalendarModal = () => {
 
     const handleModalClose = () => {
         setFormValues(initEvent);
-        calendarDispatch(eventClearActiveEvent());
         uiDispatch(uiCloseModal());
+
+        setTimeout(() => {
+            calendarDispatch(eventClearActiveEvent());
+        }, 210);
 
         const allEvents = document.querySelectorAll(".rbc-event");
         allEvents.forEach((event) => {
@@ -136,13 +137,13 @@ const CalendarModal = () => {
                 className="modal"
                 overlayClassName="modal-fondo"
             >
-                {activeEvent ? <h1> Edit event </h1> : <h1> New event </h1>}
+                {activeEvent ? <h1 className="modalH1"> Edit event </h1> : <h1 className="modalH1"> New event </h1>}
 
                 <hr />
                 <form className="container" onSubmit={hanldeSubmitForm}>
 
                     <div className="form-group">
-                        <label>Fecha y hora inicio</label>
+                        <label>Starting date</label>
                         <DateTimePicker
                             onChange={handleStartDateChange}
                             value={start}
@@ -151,7 +152,7 @@ const CalendarModal = () => {
                     </div>
 
                     <div className="form-group">
-                        <label>Fecha y hora fin</label>
+                        <label>Final date</label>
                         <DateTimePicker
                             onChange={handleEndDateChange}
                             value={end}
@@ -162,7 +163,7 @@ const CalendarModal = () => {
 
                     <hr />
                     <div className="form-group">
-                        <label>Titulo y notas</label>
+                        <label>Title and Notes</label>
                         <input
                             type="text"
                             className={`form-control ${!titleValid && " is-invalid "}`}
@@ -172,7 +173,7 @@ const CalendarModal = () => {
                             value={title}
                             onChange={hadleInputChange}
                         />
-                        <small id="emailHelp" className="form-text text-muted">Una descripción corta</small>
+                        <small id="emailHelp" className="form-text text-muted ml-1">A short description</small>
                     </div>
 
                     <div className="form-group">
@@ -185,7 +186,7 @@ const CalendarModal = () => {
                             value={notes}
                             onChange={hadleInputChange}
                         ></textarea>
-                        <small id="emailHelp" className="form-text text-muted">Información adicional</small>
+                        <small id="emailHelp" className="form-text text-muted ml-1">Aditional information</small>
                     </div>
 
                     <button

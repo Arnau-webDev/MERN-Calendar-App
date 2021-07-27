@@ -12,7 +12,7 @@ export const eventStartAddNew = (event) => {
             const res = await fetchWithToken("events", event, "POST");
             const body = await res.json();
 
-            console.log(body);
+            // console.log(body);
 
             if (body.ok) {
                 event.id = body.event.id;
@@ -53,7 +53,7 @@ export const eventClearActiveEvent = () => {
 export const eventStartUpdate = (event) => {
     return async (dispatch) => {
         try {
-            console.log(event);
+            // console.log(event);
             const res = await fetchWithToken(`events/${event.id}`, event, "PUT");
             const body = await res.json();
 
@@ -94,7 +94,7 @@ export const eventStartDelete = () => {
             console.log(error);
         }
 
-        console.log(activeEvent);
+        // console.log(activeEvent);
     };
 };
 

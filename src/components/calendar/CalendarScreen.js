@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 
 import Navbar from "../ui/Navbar";
-import { messages } from "../../helpers/calendarMessages.js";
+// import { messages } from "../../helpers/calendarMessages.js";
 import CalendarEvent from "./CalendarEvent";
 import CalendarModal from "./CalendarModal";
 
@@ -18,7 +18,7 @@ import { calendarReducer } from "../../reducers/calendarReducer";
 import AddNewFab from "../ui/AddNewFab";
 import DeleteEventFab from "../ui/DeleteEventFab";
 
-moment.locale("es");
+moment.locale("en");
 
 const localizer = momentLocalizer(moment);
 
@@ -38,7 +38,7 @@ const CalendarScreen = () => {
 
     const eventStyleGetter = (event) => {
         const style = {
-            backgroundColor: (uid === event.user._id) ? "#367CCF7" : "#465660",
+            backgroundColor: (uid === event.user._id) ? "hsl(213,61%,51%)" : "hsl(213,61%,31%)",
             borderRadius: "0px",
             opacity: 0.8,
             display: "block",
@@ -78,6 +78,9 @@ const CalendarScreen = () => {
                 localizer={localizer}
                 events={events}
                 views={["month", "week", "day"]}
+                formats={{
+                    timeGutterFormat: "HH:mm"
+                }}
                 startAccessor="start"
                 endAccessor="end"
                 onDoubleClickEvent={onDoubleClick}

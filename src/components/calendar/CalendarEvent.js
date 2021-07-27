@@ -4,9 +4,9 @@ const CalendarEvent = ({ event }) => {
     const { title, user } = event;
 
     return (
-        <div>
-            <strong>{title}</strong>
-            <span>- {user.name}</span>
+        <div className="mt-1">
+            <span className="calendarEventTitle">{title}</span>
+            <small> - {user.name}</small>
         </div>
     );
 };

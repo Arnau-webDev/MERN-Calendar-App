@@ -10,7 +10,7 @@ export const startLogin = (email, password) => {
         const res = await fetchWithoutToken("auth/", { email, password }, "POST");
         const body = await res.json();
 
-        console.log(body);
+        // console.log(body);
 
         if (body.ok) {
             localStorage.setItem("token", body.token);
@@ -31,7 +31,7 @@ export const startRegister = (name, email, password) => {
         const res = await fetchWithoutToken("auth/new", { name, email, password }, "POST");
         const body = await res.json();
 
-        console.log(body);
+        // console.log(body);
         if (body.ok) {
             localStorage.setItem("token", body.token);
             localStorage.setItem("token-init-date", new Date().getTime());
@@ -60,7 +60,7 @@ export const startChecking = () => {
         const res = await fetchWithToken("auth/renew");
         const body = await res.json();
 
-        console.log(body);
+        // console.log(body);
 
         if (body.ok) {
             localStorage.setItem("token", body.token);
